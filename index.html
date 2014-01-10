@@ -1,0 +1,103 @@
+	
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+	<style>
+		#inputArea{
+			text-align:center;
+			width:100%;
+		}
+		#msg{
+			width:100%;
+			height: 50px;	
+		}
+		
+		.username{
+			font-weight: bold;
+		}
+		.time{
+			font-weight: bold;
+		}
+	</style>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect();
+		socket.on('news', function(data){
+			console.log(data);
+			socket.emit('my other event', {my:'data'});	
+		});
+
+
+		function showMsg(msg){
+			var c = document.createElement('div');
+                       	
+			console.log("recieved msg: "+msg);
+			var tmp = [];
+			tmp.push('<span class="username">');
+			tmp.push(msg.username);
+			tmp.push('</span> - ');
+			tmp.push('<span class="time">');
+			tmp.push(msg.timestamp);
+			tmp.push(':</span><br/>');
+			
+			tmp.push('<span class="dialogue">');
+			tmp.push(msg.msg);
+			tmp.push('</span>');
+
+			 c.innerHTML = tmp.join('');
+                        
+			var showArea = document.getElementById('show');
+
+			showArea.appendChild(c);
+
+			document.body.scrollTop = document.body.scrollHeight;
+		}
+	
+		socket.on('msg', function(data){
+			console.log('recieve:' + data);
+			showMsg(data);
+		});
+
+		function clearMsg(){
+			document.getElementById('msg').value = '';
+		}
+
+		function sendMsg(){
+                                console.log('send');
+                                
+                                var msg = {'username': username, 'msg': document.getElementById('msg').value, 'timestamp': new Date().toLocaleTimeString() };
+                                
+				socket.emit('broadcast', msg);            
+                                showMsg(msg);
+				clearMsg();
+                }
+
+		var username;//用户名
+		window.onload = function(){
+			var u = document.getElementById('username')
+			u.addEventListener('change', function(){
+				username = u.value;
+			}, false);
+		
+			document.getElementById('send').addEventListener('click', sendMsg, false);
+
+			document.getElementById('msg').addEventListener('keydown', function(event){
+                        //console.log("keycode:"+event.keyCode);
+				if(event.keyCode === 13){
+					sendMsg();
+				}
+	                },false);
+
+		}
+
+
+	</script>
+	<div>
+		nickname: <input type='text' id='username'/>
+	</div>
+	<div id="show">聊天区域</div>
+	<div id="inputArea">
+		<input type="textarea" id="msg"/>
+		<input type="button" id="send" value="SUBMIT"/>
+	</div>

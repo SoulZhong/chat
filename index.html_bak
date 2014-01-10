@@ -1,0 +1,24 @@
+
+	<script src="/node_modules/socket.io/lib/socket.io.js"></script>
+	<script>
+		var socket = io.connect('http://localhost:8080');
+		socket.on('news', function(data){
+			console.log(data);
+			socket.emit('my other event', {my:'data'});	
+		});
+	
+	window.onload = function(){
+		document.getElementById('send').addEventListener('click', function(){
+			console.log('send');
+
+		}, false);
+
+
+	}
+
+	</script>
+		<div id='screen'></div>
+		
+		<input type='text' id='msg'/>
+		<input type='button' id='send' value='SUBMIT'/>
+
