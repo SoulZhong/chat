@@ -9,6 +9,10 @@ app.get('/', function(req, res){
 	res.sendfile(__dirname+'/index.html');
 });
 
+app.get('/test.html' function(req, res){
+	res.sendfile(__dirname+'/test.html');
+});
+
 var users = {};
 
 sockets.on('connection', function(socket){

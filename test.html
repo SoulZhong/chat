@@ -1,0 +1,21 @@
+<!doctype html> 
+<html> 
+<head> 
+<script language="javascript" src ="http://tts.itri.org.tw/TTScript/Text2SpeechJsApiV2.php?key=*27*3B*218.*3C*3B*3A3*2A*14*2A0*3D5*3A85*3A3gfe"> </script> 
+</head> 
+<body> 
+<div id="content"> 
+<div id="mute">不想聽到的內容</div> 
+<div class="mute">不想聽到的內容</div> 
+將會聽到的內容 
+</div> 
+<script language="javascript"> 
+    var tts = new TTS(); 
+    tts.muteTag = "id:mute|class:mute"; 
+    tts.PlayerSet.hidden = false;
+    tts.PlayerSet.width = 100; 
+    tts.PlayerSet.height = 30;
+    tts.ConvertInit("id:content","media","Bruce","100","0","0","0","5");
+</script> 
+</body> 
+</html> 
