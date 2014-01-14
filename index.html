@@ -1,4 +1,5 @@
-	
+
+
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 
@@ -18,6 +19,9 @@
 		.time{
 			font-weight: bold;
 		}
+		.notice{
+			color: green;
+		}
 	</style>
 
 	<script src="/socket.io/socket.io.js"></script>
@@ -27,8 +31,43 @@
 			console.log(data);
 			socket.emit('my other event', {my:'data'});	
 		});
+		
+		//用户上线
+		socket.on('notice',function(data){
+			console.log("notice:" + data);
+			notice(data);
+		});
+			
+		socket.on('user', function(data){
+			console.log('user:'+ user);
+		});
 
+		function appendToShow(msg){
+			var showArea = document.getElementById('show');
 
+                        showArea.appendChild(msg);
+
+                        document.body.scrollTop = document.body.scrollHeight;
+
+		}
+
+		function notice(data){
+			var c = document.createElement('div');
+			var tmp = [];
+			tmp.push('<span class="time">');
+                        tmp.push(new Date().toLocaleTimeString());
+                        tmp.push(':</span> - ');
+
+			tmp.push('<span class="notice">');
+			tmp.push(data.username);
+			tmp.push(' ');
+			tmp.push(data.type);
+			tmp.push('</span>');
+			
+			c.innerHTML = tmp.join('');
+			appendToShow(c);
+		}
+			
 		function showMsg(msg){
 			var c = document.createElement('div');
                        	
@@ -45,13 +84,9 @@
 			tmp.push(msg.msg);
 			tmp.push('</span>');
 
-			 c.innerHTML = tmp.join('');
+			c.innerHTML = tmp.join('');
+			appendToShow(c);
                         
-			var showArea = document.getElementById('show');
-
-			showArea.appendChild(c);
-
-			document.body.scrollTop = document.body.scrollHeight;
 		}
 	
 		socket.on('msg', function(data){
@@ -74,11 +109,21 @@
                 }
 
 		var username;//用户名
+		
+		function login(){
+                        socket.emit('login', {'name':username});
+                }
+
 		window.onload = function(){
 			var u = document.getElementById('username')
 			u.addEventListener('change', function(){
 				username = u.value;
+				login();
 			}, false);
+
+		//	u.addEventListener('blur', function(){
+		//		login();
+		//	});
 		
 			document.getElementById('send').addEventListener('click', sendMsg, false);
 

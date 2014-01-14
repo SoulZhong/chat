@@ -9,6 +9,8 @@ app.get('/', function(req, res){
 	res.sendfile(__dirname+'/index.html');
 });
 
+var users = {};
+
 sockets.on('connection', function(socket){
 	socket.emit('news', {hello:'world'});
 
@@ -18,5 +20,18 @@ sockets.on('connection', function(socket){
 	});
 
 
+	socket.on('login', function(data){
+		
+		console.log('login:' + data);
+		socket.name = data.name;	
+		users[data.name] = 1;
+		socket.broadcast.emit('notice', {'type':'login','username':data.name});
+	});
+	
+	socket.on('disconnect', function(data){
+		console.log('disconnect:' + data);
+		users[socket.name] = 0;
+		socket.broadcast.emit('notice',{'type':'logout','data':data});
+	});
 });
 
