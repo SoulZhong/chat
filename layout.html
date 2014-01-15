@@ -1,0 +1,82 @@
+<!DOCTYP html>
+<html>
+	<head>
+		<style>
+			body{
+				margin:0px;
+				width:100%;
+			}
+			#wrapper{
+				width:100%;
+				height:100%;	
+			}
+			#left{
+				width:200px;
+				height:100%;
+				float:left;
+				position:absolute;
+				left:-200px;
+				background-color:green;
+			}
+			#center{
+				height:100%;
+				width:100%;
+				float:left;
+			}
+			#button{
+				position:relative;
+				top: 200px;
+				background-color: green;
+				width:30px;
+				height:100px;
+				-moz-border-radius-topright: 10px;
+				-moz-border-radius-bottomright: 10px;
+				-webkit-border-top-right-radius:10px;
+				-webkit-border-bottom-right-radius:10px;
+				border-top-right-radius:10px;
+				border-bottom-right-radius:10px;
+				box-shadow:-2px 0px 8px #f00,0px -2px 8px #000,0px 2px 8px #9e038a,2px 0px 8px #0f0;
+			}
+
+			.translate-from-left{
+			    -webkit-transition:1s ease all;
+			    -moz-transition:1s ease all;
+			    position:absolute;
+			    left:200px;
+			}
+			.translate-to-left{
+				-webkit-transition:1s ease all;
+				-moz-transition:1s ease all;
+				position:absolute;
+				left:0px;
+			}
+		</style>
+		<script type='text/javascript'>
+			window.onload = function(){
+				
+				document.getElementById('button').addEventListener('click', function(){
+					console.log('button clicked');
+					var wrapper = document.getElementById('wrapper');
+					
+					var className = wrapper.className;
+					if(className == 'translate-from-left'){
+						wrapper.className = 'translate-to-left';
+					}else{
+
+						wrapper.className = 'translate-from-left';
+					}			
+					
+				});
+			};	
+		</script>
+
+	</head>
+	<body>
+		<div id='wrapper'>
+			<div id='left'>LEFT</div>
+			<div id='center'>CENTER
+				<div id='button'></div>
+			</div>
+		</div>
+	</body>
+</html>
