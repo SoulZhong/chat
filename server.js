@@ -16,7 +16,7 @@ app.get('/test.html',function(req, res){
 var users = {};
 
 sockets.on('connection', function(socket){
-	socket.emit('news', {hello:'world'});
+	socket.emit('notice', {'list':users});
 
 	socket.on('broadcast', function(data){
         	console.log("server recieved: "+data);
@@ -34,7 +34,7 @@ sockets.on('connection', function(socket){
 	socket.on('logout', function(data){
 		console.log('logout:' + data);
 		users[data.name] = 0;
-		socket.broadcast.emit('notic', {'type':'logout', 'username':data.name, 'list':users});
+		socket.broadcast.emit('notice', {'type':'logout', 'username':data.name, 'list':users});
 		
 	});
 		

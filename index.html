@@ -22,21 +22,31 @@
 		.notice{
 			color: green;
 		}
+		
+		#userlist span{
+			margin:0px 15px 3px 0px;
+			padding:0px 10px;
+			background-color:yellow;
+			-moz-border-radius: 3px;
+                        -webkit-border-radius:3px;
+
+		}
+		#nickname{
+			margin: 10px 0px;	
+		}
+		
 	</style>
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		var socket = io.connect();
-		socket.on('news', function(data){
-			console.log(data);
-			socket.emit('my other event', {my:'data'});	
-		});
 		
 		//用户上线
 		socket.on('notice',function(data){
 			console.log("notice:" + data);
-			notice(data);
-			
+			if(data.type !== undefined){			
+				notice(data);
+			}
 			refleshUserList(data.list);
 		});
 			
@@ -73,15 +83,13 @@
 		function refleshUserList(users){
 		
 			var tmp = [];
-			tmp.push('<ul>');
 			for(var user in users ){
 				if(users[user] === 1){
-					tmp.push('<li>');
+					tmp.push('<span>');
 					tmp.push(user);
-					tmp.push('</li>');
+					tmp.push('</span>');
 				}
 			}
-			tmp.push('</ul>');
 		
 			document.getElementById('userlist').innerHTML = tmp.join('');	
 		}	
@@ -157,12 +165,13 @@
 
 
 	</script>
+	<h3>Online List</h3>
 	<div id='userlist'>
 	</div>
-	<div>
+	<div id='nickname'>
 		nickname: <input type='text' id='username'/>
 	</div>
-	<div id="show">聊天区域</div>
+	<div id="show"></div>
 	<div id="inputArea">
 		<input type="textarea" id="msg"/>
 		<input type="button" id="send" value="SUBMIT"/>
