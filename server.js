@@ -29,13 +29,21 @@ sockets.on('connection', function(socket){
 		console.log('login:' + data);
 		socket.name = data.name;	
 		users[data.name] = 1;
-		socket.broadcast.emit('notice', {'type':'login','username':data.name});
+		socket.broadcast.emit('notice', {'type':'login','username':data.name, 'list':users});
 	});
-	
+	socket.on('logout', function(data){
+		console.log('logout:' + data);
+		users[data.name] = 0;
+		socket.broadcast.emit('notic', {'type':'logout', 'username':data.name, 'list':users});
+		
+	});
+		
 	socket.on('disconnect', function(data){
-		console.log('disconnect:' + data);
-		users[socket.name] = 0;
-		socket.broadcast.emit('notice',{'type':'logout','data':data});
+		console.log('disconnect:' + data+", socket.name:" + socket.name);
+		if(socket.name != undefined){
+			users[socket.name] = 0;
+			socket.broadcast.emit('notice',{'type':'logout', 'username':socket.name, 'list':users});
+		}
 	});
 });
 

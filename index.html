@@ -36,6 +36,8 @@
 		socket.on('notice',function(data){
 			console.log("notice:" + data);
 			notice(data);
+			
+			refleshUserList(data.list);
 		});
 			
 		socket.on('user', function(data){
@@ -67,7 +69,22 @@
 			c.innerHTML = tmp.join('');
 			appendToShow(c);
 		}
-			
+		
+		function refleshUserList(users){
+		
+			var tmp = [];
+			tmp.push('<ul>');
+			for(var user in users ){
+				if(users[user] === 1){
+					tmp.push('<li>');
+					tmp.push(user);
+					tmp.push('</li>');
+				}
+			}
+			tmp.push('</ul>');
+		
+			document.getElementById('userlist').innerHTML = tmp.join('');	
+		}	
 		function showMsg(msg){
 			var c = document.createElement('div');
                        	
@@ -114,17 +131,19 @@
                         socket.emit('login', {'name':username});
                 }
 
+		function logout(username){
+			socket.emit('logout', {'name':username});
+		}
+
 		window.onload = function(){
 			var u = document.getElementById('username')
 			u.addEventListener('change', function(){
+				
+				logout(username);
 				username = u.value;
 				login();
 			}, false);
 
-		//	u.addEventListener('blur', function(){
-		//		login();
-		//	});
-		
 			document.getElementById('send').addEventListener('click', sendMsg, false);
 
 			document.getElementById('msg').addEventListener('keydown', function(event){
@@ -138,6 +157,8 @@
 
 
 	</script>
+	<div id='userlist'>
+	</div>
 	<div>
 		nickname: <input type='text' id='username'/>
 	</div>
