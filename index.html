@@ -39,8 +39,13 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
+		var vod = new Audio('notice.wav');
+		function playSound(){
+			vod.play();
+		}
+
 		var socket = io.connect();
-		
+		var isFocus = true;
 		//用户上线
 		socket.on('notice',function(data){
 			console.log("notice:" + data);
@@ -117,6 +122,10 @@
 		socket.on('msg', function(data){
 			console.log('recieve:' + data);
 			showMsg(data);
+
+			if(!isFocus){
+				playSound();
+			}
 		});
 
 		function clearMsg(){
@@ -144,6 +153,15 @@
 		}
 
 		window.onload = function(){
+			window.onblur = function (){
+				isFocus = false;
+			}
+
+			window.onfocus = function(){
+				isFocus = true;
+			}
+
+
 			var u = document.getElementById('username')
 			u.addEventListener('change', function(){
 				

@@ -9,6 +9,10 @@ app.get('/', function(req, res){
 	res.sendfile(__dirname+'/index.html');
 });
 
+app.get('/notice.wav', function(req, res){
+	res.sendfile(__dirname+'/vod/notice.wav');
+});
+
 app.get('/test.html',function(req, res){
 	res.sendfile(__dirname+'/test.html');
 });
